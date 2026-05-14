@@ -1,6 +1,8 @@
 import './globals.css'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
+import CartBar from '@/components/CartBar'
+import { CartProvider } from '@/lib/CartContext'
 import Script from 'next/script'
 
 export const metadata = {
@@ -12,14 +14,17 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <a href="#main-content" className="skip-link">
-          Skip to main content
-        </a>
-        <Nav />
-        <main id="main-content" tabIndex="-1">
-          {children}
-        </main>
-        <Footer />
+        <CartProvider>
+          <a href="#main-content" className="skip-link">
+            Skip to main content
+          </a>
+          <Nav />
+          <main id="main-content" tabIndex="-1">
+            {children}
+          </main>
+          <CartBar />
+          <Footer />
+        </CartProvider>
         <Script
           src="https://atdevicesforkids.app.neoncrm.com/forms/share/UE9QLUZPUk1TSEFSSU5HLUNPREUxOA=="
           strategy="beforeInteractive"

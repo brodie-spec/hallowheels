@@ -302,8 +302,9 @@ export default function SponsorsPage() {
           margin: 0 auto;
           background: var(--white);
           border-radius: var(--radius-lg);
-          padding: 40px;
+          padding: 0px;
           box-shadow: var(--shadow);
+          overflow: hidden;
         }
 
         /* ── Questions band ── */
