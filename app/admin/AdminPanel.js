@@ -446,58 +446,34 @@ export default function AdminPanel() {
           min-height: 100vh;
           background: #F1F4F8;
         }
-        .admin-topbar {
-          position: sticky;
-          top: 0;
-          z-index: 200;
-          background: var(--navy-dark);
-          border-bottom: 3px solid var(--yellow);
-          padding: 0 24px;
-          height: 60px;
+        .admin-utility-bar {
           display: flex;
           align-items: center;
           justify-content: space-between;
+          gap: 12px;
+          padding-bottom: 8px;
+          border-bottom: 2px solid var(--cream-dark);
+          margin-bottom: 8px;
         }
-        .admin-topbar-logo {
-          font-family: var(--font-display);
-          font-size: 1.4rem;
-          font-weight: 900;
-          color: var(--white);
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-        .admin-topbar-logo span { color: var(--yellow); }
-        .admin-topbar-badge {
+        .admin-utility-badge {
           font-family: var(--font-body);
-          font-size: 0.65rem;
+          font-size: 0.7rem;
           font-weight: 700;
           letter-spacing: 1.5px;
           text-transform: uppercase;
           background: var(--orange);
           color: var(--white);
-          padding: 3px 8px;
+          padding: 3px 10px;
           border-radius: var(--radius-full);
         }
-        .admin-topbar-right {
+        .admin-utility-right {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 10px;
         }
-        .admin-topbar-year {
+        .admin-utility-year {
           font-size: 0.8rem;
-          color: rgba(255,255,255,0.55);
-        }
-        .admin-signout {
-          background: rgba(255,255,255,0.1) !important;
-          color: rgba(255,255,255,0.8) !important;
-          border-color: rgba(255,255,255,0.2) !important;
-          font-size: 0.8rem !important;
-          padding: 7px 14px !important;
-        }
-        .admin-signout:hover {
-          background: rgba(255,255,255,0.18) !important;
-          color: var(--white) !important;
+          color: var(--text-muted);
         }
         .admin-content {
           max-width: 960px;
@@ -967,7 +943,6 @@ export default function AdminPanel() {
         /* ── Responsive ── */
         @media (max-width: 640px) {
           .admin-content { padding: 24px 16px 100px; }
-          .admin-topbar { padding: 0 16px; }
           .admin-card-header, .admin-card-body { padding-left: 16px; padding-right: 16px; }
           .form-row { grid-template-columns: 1fr; }
           .costume-row-actions { width: 100%; justify-content: flex-end; }
@@ -992,26 +967,22 @@ export default function AdminPanel() {
       </div>
 
       <div className="admin-wrap">
-        {/* ── Top bar ── */}
-        <header className="admin-topbar" role="banner">
-          <div className="admin-topbar-logo">
-            Hallo<span>Wheels</span>
-            <span className="admin-topbar-badge">Admin</span>
-          </div>
-          <div className="admin-topbar-right">
-            <span className="admin-topbar-year">{activeYear}</span>
-            <button
-              className="btn admin-signout"
-              onClick={handleSignOut}
-              aria-label="Sign out of admin panel"
-            >
-              Sign Out
-            </button>
-          </div>
-        </header>
-
-        {/* ── Content ── */}
         <div className="admin-content">
+
+          {/* ── Utility bar ── */}
+          <div className="admin-utility-bar">
+            <span className="admin-utility-badge">Admin Panel</span>
+            <div className="admin-utility-right">
+              <span className="admin-utility-year">{activeYear}</span>
+              <button
+                className="btn btn-sm btn-secondary"
+                onClick={handleSignOut}
+                aria-label="Sign out of admin panel"
+              >
+                Sign Out
+              </button>
+            </div>
+          </div>
 
           {/* ── COSTUMES ── */}
           <div>

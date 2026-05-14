@@ -25,9 +25,11 @@ export default function Nav() {
           top: 0; left: 0; right: 0;
           height: var(--nav-height);
           z-index: 1000;
-          transition: background 0.3s, box-shadow 0.3s;
-          background: transparent;
+          background: rgba(253, 246, 236, 0.96);
+          backdrop-filter: blur(12px);
+          box-shadow: 0 1px 0 rgba(0,0,0,0.08);
         }
+
         .nav.scrolled {
           background: rgba(253, 246, 236, 0.96);
           backdrop-filter: blur(12px);
