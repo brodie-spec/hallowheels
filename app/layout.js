@@ -3,7 +3,6 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import CartBar from '@/components/CartBar'
 import { CartProvider } from '@/lib/CartContext'
-import Script from 'next/script'
 
 export const metadata = {
   title: 'HalloWheels 2026 — Children\'s Assistive Technology Service',
@@ -13,6 +12,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.write('<script src="https://atdevicesforkids.app.neoncrm.com/forms/share/UE9QLUZPUk1TSEFSSU5HLUNPREUxOA=="><\\/script>');`
+          }}
+        />
+      </head>
       <body>
         <CartProvider>
           <a href="#main-content" className="skip-link">
@@ -25,10 +31,6 @@ export default function RootLayout({ children }) {
           <CartBar />
           <Footer />
         </CartProvider>
-        <Script
-          src="https://atdevicesforkids.app.neoncrm.com/forms/share/UE9QLUZPUk1TSEFSSU5HLUNPREUxOA=="
-          strategy="beforeInteractive"
-        />
       </body>
     </html>
   )
