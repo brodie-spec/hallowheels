@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase'
 import HeroSlideshow from '@/components/HeroSlideshow'
 import ProgressBar from '@/components/ProgressBar'
 import CountdownTimer from '@/components/CountdownTimer'
+import TrunkOrTreatEvents from '@/components/TrunkOrTreatEvents'
 
 // Sample past photos for hero slideshow — replace with real paths in /public
 const HERO_PHOTOS = [
@@ -547,12 +548,12 @@ export default async function Home() {
               <h2 id="what-heading">Every Child Belongs. Every Creation Matters.</h2>
               <p>
                 HalloWheels is an annual fundraiser where children with disabilities
-                show off their incredible, handmade Halloween costumes — many built
+                show off their incredible, handmade Halloween costumes, many built
                 right around their wheelchairs, walkers, and adaptive devices.
               </p>
               <p>
-                Every dollar raised goes directly to C.A.T.S. — Children's Assistive
-                Technology Service — a Virginia nonprofit that provides mobility,
+                Every dollar raised goes directly to Children's Assistive
+                Technology Service (C.A.T.S.) a Virginia nonprofit that provides mobility,
                 communication, and positioning devices to children who need them,
                 at no cost to families.
               </p>
@@ -566,7 +567,7 @@ export default async function Home() {
                   <span>statewide reach across Virginia</span>
                 </div>
                 <div className="what-stat" role="listitem">
-                  <strong>Free</strong>
+                  <strong>No Cost</strong>
                   <span>assistive technology for families</span>
                 </div>
                 <div className="what-stat" role="listitem">
@@ -604,6 +605,9 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── TRUNK-OR-TREAT EVENTS (all states) ── */}
+      <TrunkOrTreatEvents />
 
       {/* ── FEATURED COSTUMES (voting state only) ── */}
       {siteState === 'voting' && (

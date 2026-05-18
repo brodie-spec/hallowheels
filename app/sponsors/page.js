@@ -9,9 +9,7 @@ const SPONSOR_LEVELS = [
     emoji: '👻',
     color: '#6B7280',
     description: 'Your sponsorship helps prepare a donated piece of pediatric assistive technology, so it is clean, safe, and ready for a child who needs it.',
-    benefits: [
-      'Mention on yard signs at local HalloWheels Trunk-Or-Treat events',
-    ],
+    benefits: [],
     cumulativeBenefits: [],
     formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/ghost-sponsor-2026',
   },
@@ -21,9 +19,7 @@ const SPONSOR_LEVELS = [
     emoji: '👺',
     color: '#22c55e',
     description: 'Your sponsorship helps restore and adapt donated equipment, giving a child greater mobility, independence, and participation in everyday life.',
-    benefits: [
-      'Featured Sponsor Spotlight on Social Media',
-    ],
+    benefits: ['Company logo with link back on atdevicesforkids.org'],
     cumulativeBenefits: ['Ghost'],
     formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/goblin-sponsor-2026',
   },
@@ -33,9 +29,7 @@ const SPONSOR_LEVELS = [
     emoji: '🧙',
     color: '#a855f7',
     description: 'Your sponsorship helps provide the batteries, parts, supplies, and tools necessary to keep specialized equipment safe, functional, and ready to use.',
-    benefits: [
-      'Sponsor recognition during HalloWheels events and announcements',
-    ],
+    benefits: ['Personal thank you letter from a board member'],
     cumulativeBenefits: ['Ghost', 'Goblin'],
     formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/witches-brew-2026',
   },
@@ -45,9 +39,7 @@ const SPONSOR_LEVELS = [
     emoji: '🏚️',
     color: '#E8621A',
     description: 'You are making a direct impact to get assistive technology throughout the state of Virginia by helping our transportation team.',
-    benefits: [
-      'Linked logo placement on HalloWheels homepage',
-    ],
+    benefits: ['Featured in a C.A.T.S. newsletter'],
     cumulativeBenefits: ['Ghost', 'Goblin', 'Witches Brew'],
     formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/haunted-mansion-2026',
   },
@@ -57,9 +49,7 @@ const SPONSOR_LEVELS = [
     emoji: '🎃',
     color: '#F5B800',
     description: 'Your sponsorship provides major support for C.A.T.S.\'s statewide equipment reuse program, helping children receive the mobility, positioning, and communication devices they need to grow, participate, and thrive.',
-    benefits: [
-      'Linked logo placement on C.A.T.S. main website atdevicesforkids.org',
-    ],
+    benefits: ['Behind-the-scenes facility tour of C.A.T.S.\'s equipment reuse operation'],
     cumulativeBenefits: ['Ghost', 'Goblin', 'Witches Brew', 'Haunted Mansion'],
     formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/great-pumpkin-2026',
   },
@@ -69,20 +59,18 @@ const SPONSOR_LEVELS = [
     emoji: '🏆',
     color: '#1B3D6E',
     description: 'Your sponsorship provides premier support for HalloWheels and C.A.T.S.\'s year-round mission, helping ensure that children with disabilities across Virginia have access to no-cost assistive technology at the right time.',
-    benefits: [
-      'Recognition as Presenting Sponsor of Local Trunk-Or-Treat',
-    ],
+    benefits: ['Additional Recognition: Dedicated "Sponsored by" signage at Hallowheels trunk-or-treat events'],
     cumulativeBenefits: ['Ghost', 'Goblin', 'Witches Brew', 'Haunted Mansion', 'Great Pumpkin'],
     formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/hallowheels-champion',
   },
 ]
 
 const SHARED_BENEFITS = [
-  'Recognition on the HalloWheels website',
-  'Inclusion in the HalloWheels commemorative booklet',
-  'Listing in event materials and promotions',
-  'Visibility to families, volunteers, and community partners across Virginia',
-  'Commemorative event booklet',
+  'Mention on Hallowheels.org',
+  'Company logo included where applicable',
+  'Social media thank you recognition',
+  'Inclusion in the Hallowheels booklet',
+  'Recognition on signs at Hallowheels trunk-or-treat events',
 ]
 
 export default function SponsorsPage() {
@@ -420,22 +408,24 @@ export default function SponsorsPage() {
               />
               <p className="level-description">{level.description}</p>
 
-              {level.cumulativeBenefits.length > 0 && (
+              {level.cumulativeBenefits.length > 0 && level.benefits.length > 0 && (
                 <div>
                   <p className="level-includes">Includes all benefits of: {level.cumulativeBenefits.join(', ')}, plus:</p>
                 </div>
               )}
-              {level.cumulativeBenefits.length === 0 && (
+              {level.cumulativeBenefits.length === 0 && level.benefits.length > 0 && (
                 <p className="level-includes">Level benefits:</p>
               )}
-              <ul className="level-benefits" role="list">
-                {level.benefits.map((benefit, i) => (
-                  <li key={i}>
-                    <span className="check" aria-hidden="true">✓</span>
-                    <span>{benefit}</span>
-                  </li>
-                ))}
-              </ul>
+              {level.benefits.length > 0 && (
+                <ul className="level-benefits" role="list">
+                  {level.benefits.map((benefit, i) => (
+                    <li key={i}>
+                      <span className="check" aria-hidden="true">✓</span>
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
 
               <button
                 onClick={() => window.open(
