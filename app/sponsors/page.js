@@ -13,7 +13,7 @@ const SPONSOR_LEVELS = [
       'Mention on yard signs at local HalloWheels Trunk-Or-Treat events',
     ],
     cumulativeBenefits: [],
-    formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/share/UE9QLUZPUk1TSEFSSU5HLUNPREUyMA==',
+    formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/ghost-sponsor-2026',
   },
   {
     name: 'Goblin',
@@ -25,7 +25,7 @@ const SPONSOR_LEVELS = [
       'Featured Sponsor Spotlight on Social Media',
     ],
     cumulativeBenefits: ['Ghost'],
-    formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/share/UE9QLUZPUk1TSEFSSU5HLUNPREUyMQ==',
+    formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/goblin-sponsor-2026',
   },
   {
     name: 'Witches Brew',
@@ -37,7 +37,7 @@ const SPONSOR_LEVELS = [
       'Sponsor recognition during HalloWheels events and announcements',
     ],
     cumulativeBenefits: ['Ghost', 'Goblin'],
-    formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/share/UE9QLUZPUk1TSEFSSU5HLUNPREUyMg==',
+    formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/witches-brew-2026',
   },
   {
     name: 'Haunted Mansion',
@@ -49,7 +49,7 @@ const SPONSOR_LEVELS = [
       'Linked logo placement on HalloWheels homepage',
     ],
     cumulativeBenefits: ['Ghost', 'Goblin', 'Witches Brew'],
-    formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/share/UE9QLUZPUk1TSEFSSU5HLUNPREUyMw==',
+    formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/haunted-mansion-2026',
   },
   {
     name: 'Great Pumpkin',
@@ -61,7 +61,7 @@ const SPONSOR_LEVELS = [
       'Linked logo placement on C.A.T.S. main website atdevicesforkids.org',
     ],
     cumulativeBenefits: ['Ghost', 'Goblin', 'Witches Brew', 'Haunted Mansion'],
-    formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/share/UE9QLUZPUk1TSEFSSU5HLUNPREUyNA==',
+    formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/great-pumpkin-2026',
   },
   {
     name: 'HalloWheels Champion',
@@ -73,7 +73,7 @@ const SPONSOR_LEVELS = [
       'Recognition as Presenting Sponsor of Local Trunk-Or-Treat',
     ],
     cumulativeBenefits: ['Ghost', 'Goblin', 'Witches Brew', 'Haunted Mansion', 'Great Pumpkin'],
-    formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/share/UE9QLUZPUk1TSEFSSU5HLUNPREUyNQ==',
+    formUrl: 'https://atdevicesforkids.app.neoncrm.com/forms/hallowheels-champion',
   },
 ]
 

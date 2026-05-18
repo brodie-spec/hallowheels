@@ -27,6 +27,13 @@ export default async function Home() {
 
   const goal = parseInt(settings.goal_amount || '25000')
 
+  const votingStartDate = new Date(settings.voting_start)
+  const formattedDate = votingStartDate.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC'
+  })
+
   return (
     <>
       <style>{`
@@ -457,7 +464,7 @@ export default async function Home() {
 
           {siteState === 'countdown' && (
             <>
-              <h1>Coming <span style={{whiteSpace:'nowrap'}}>October 22</span></h1>
+              <h1>Coming <span style={{whiteSpace:'nowrap'}}>{formattedDate}</span></h1>
               <p className="hero-desc">
                 HalloWheels is back! Get ready to see the most incredible, creative, and
                 joyful costumes — all built around the mobility devices that help these
