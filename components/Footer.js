@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import SponsorCarousel from '@/components/SponsorCarousel'
 
 export default function Footer() {
   const year = new Date().getFullYear()
@@ -7,14 +8,14 @@ export default function Footer() {
     <>
       <style>{`
         .footer {
-          background: var(--navy-dark);
+          background: var(--navy);
           color: rgba(255,255,255,0.7);
-          padding: 48px 0 32px;
+          padding: 0 0 32px;
         }
         .footer-inner {
           max-width: var(--max-width);
           margin: 0 auto;
-          padding: 0 24px;
+          padding: 48px 24px 0;
         }
         .footer-top {
           display: grid;
@@ -107,6 +108,7 @@ export default function Footer() {
       `}</style>
 
       <footer className="footer" role="contentinfo">
+        <SponsorCarousel />
         <div className="footer-inner">
           <div className="footer-top">
             <div className="footer-brand">
