@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-
 const EVENTS = [
   {
     city: 'Hampton Roads',
@@ -37,43 +35,6 @@ function getMapsUrl(address) {
 }
 
 export default function TrunkOrTreatEvents() {
-  const [current, setCurrent] = useState(0)
-  const intervalRef = useRef(null)
-  const reducedMotion = useRef(false)
-
-  useEffect(() => {
-    reducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reducedMotion.current) return
-
-    intervalRef.current = setInterval(() => {
-      setCurrent(i => (i + 1) % EVENTS.length)
-    }, 4000)
-    return () => clearInterval(intervalRef.current)
-  }, [])
-
-  function goTo(index) {
-    clearInterval(intervalRef.current)
-    setCurrent(index)
-    if (!reducedMotion.current) {
-      intervalRef.current = setInterval(() => {
-        setCurrent(i => (i + 1) % EVENTS.length)
-      }, 4000)
-    }
-  }
-
-  function prev() {
-    goTo((current - 1 + EVENTS.length) % EVENTS.length)
-  }
-
-  function next() {
-    goTo((current + 1) % EVENTS.length)
-  }
-
-  function handleCarouselKey(e) {
-    if (e.key === 'ArrowLeft') { e.preventDefault(); prev() }
-    if (e.key === 'ArrowRight') { e.preventDefault(); next() }
-  }
-
   return (
     <>
       <style>{`
@@ -197,98 +158,9 @@ export default function TrunkOrTreatEvents() {
           outline-offset: 2px;
         }
 
-        /* ── Carousel ── */
-        .tot-carousel-wrap {
-          max-width: 560px;
-          margin: 56px auto 0;
-          padding: 0 24px;
-        }
-        .tot-carousel {
-          position: relative;
-          border-radius: var(--radius-lg);
-          overflow: hidden;
-          box-shadow: var(--shadow-lg);
-          background: var(--cream-dark);
-          aspect-ratio: 3/4;
-        }
-        .tot-carousel-slide {
-          position: absolute;
-          inset: 0;
-          opacity: 0;
-          transition: opacity 0.5s ease;
-          pointer-events: none;
-        }
-        .tot-carousel-slide.active {
-          opacity: 1;
-          pointer-events: auto;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .tot-carousel-slide { transition: none; }
-        }
-        .tot-carousel-slide img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-          display: block;
-        }
-        .tot-carousel-btn {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          z-index: 2;
-          background: rgba(27,61,110,0.75);
-          color: var(--white);
-          border: none;
-          border-radius: 50%;
-          width: 44px;
-          height: 44px;
-          font-size: 1.2rem;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: background 0.2s;
-        }
-        .tot-carousel-btn:hover {
-          background: var(--navy);
-        }
-        .tot-carousel-btn:focus-visible {
-          outline: 3px solid var(--yellow);
-          outline-offset: 2px;
-        }
-        .tot-carousel-prev { left: 12px; }
-        .tot-carousel-next { right: 12px; }
-        .tot-carousel-dots {
-          display: flex;
-          justify-content: center;
-          gap: 10px;
-          margin-top: 20px;
-        }
-        .tot-carousel-dot {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          border: 2px solid var(--navy);
-          background: transparent;
-          cursor: pointer;
-          padding: 0;
-          transition: background 0.2s;
-        }
-        .tot-carousel-dot.active {
-          background: var(--navy);
-        }
-        .tot-carousel-dot:focus-visible {
-          outline: 3px solid var(--yellow);
-          outline-offset: 2px;
-        }
-
         /* ── Responsive ── */
         @media (max-width: 900px) {
           .tot-grid { grid-template-columns: 1fr; max-width: 480px; }
-          .tot-carousel-wrap { max-width: 480px; }
-        }
-        @media (max-width: 600px) {
-          .tot-carousel-wrap { padding: 0 16px; }
         }
       `}</style>
 
@@ -299,7 +171,6 @@ export default function TrunkOrTreatEvents() {
           <div className="divider" aria-hidden="true" />
         </div>
 
-        {/* ── Event cards ── */}
         <ul className="tot-grid" role="list">
           {EVENTS.map((event) => (
             <li key={event.city} role="listitem">
@@ -341,67 +212,6 @@ export default function TrunkOrTreatEvents() {
             </li>
           ))}
         </ul>
-
-        {/* ── Carousel ── */}
-        <div className="tot-carousel-wrap">
-          <div
-            role="region"
-            aria-label="Event flyer carousel"
-            aria-roledescription="carousel"
-            onKeyDown={handleCarouselKey}
-            tabIndex="0"
-          >
-            <div className="tot-carousel">
-              {EVENTS.map((event, i) => (
-                <div
-                  key={event.city}
-                  className={`tot-carousel-slide${i === current ? ' active' : ''}`}
-                  role="group"
-                  aria-roledescription="slide"
-                  aria-label={`${i + 1} of ${EVENTS.length}: ${event.city}`}
-                  aria-hidden={i !== current}
-                >
-                  <img src={event.image} alt={event.imageAlt} />
-                </div>
-              ))}
-              <button
-                className="tot-carousel-btn tot-carousel-prev"
-                onClick={prev}
-                aria-label="Previous event flyer"
-              >
-                ‹
-              </button>
-              <button
-                className="tot-carousel-btn tot-carousel-next"
-                onClick={next}
-                aria-label="Next event flyer"
-              >
-                ›
-              </button>
-            </div>
-
-            <div
-              className="tot-carousel-dots"
-              role="tablist"
-              aria-label="Select event flyer"
-            >
-              {EVENTS.map((event, i) => (
-                <button
-                  key={event.city}
-                  className={`tot-carousel-dot${i === current ? ' active' : ''}`}
-                  onClick={() => goTo(i)}
-                  role="tab"
-                  aria-selected={i === current}
-                  aria-label={`Show ${event.city} flyer`}
-                />
-              ))}
-            </div>
-
-            <div aria-live="polite" aria-atomic="true" className="sr-only">
-              {EVENTS[current].city} event flyer
-            </div>
-          </div>
-        </div>
       </section>
     </>
   )

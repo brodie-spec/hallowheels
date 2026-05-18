@@ -103,8 +103,6 @@ export default async function SponsorCarousel() {
         .sponsor-logo-box img {
           object-fit: contain;
           display: block;
-          filter: brightness(0) invert(1);
-          opacity: 0.85;
         }
         .sponsor-name-text {
           font-family: var(--font-display);
