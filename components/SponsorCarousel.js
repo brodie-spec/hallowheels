@@ -2,14 +2,13 @@
 // in the Supabase dashboard as a public bucket before sponsor logos will display.
 import { supabase } from '@/lib/supabase'
 
-function logoHeight(order) {
-  // Ghost (1) → 40px, HalloWheels Champion (6) → 65px
-  return 40 + ((order || 1) - 1) * 5
+function logoHeight() {
+  return 90
 }
 
 function logoMaxWidth(order) {
-  // Ghost (1) → 100px, HalloWheels Champion (6) → 200px
-  return 100 + ((order || 1) - 1) * 20
+  // Ghost (1) → 100px, HalloWheels Champion (6) → 220px
+  return 100 + ((order || 1) - 1) * 24
 }
 
 export default async function SponsorCarousel() {
@@ -35,7 +34,7 @@ export default async function SponsorCarousel() {
         }
         .sponsor-carousel-heading {
           font-family: var(--font-body);
-          font-size: 0.68rem;
+          font-size: 0.82rem;
           font-weight: 700;
           letter-spacing: 2px;
           text-transform: uppercase;
@@ -48,6 +47,9 @@ export default async function SponsorCarousel() {
         .sponsor-marquee-overflow {
           overflow: hidden;
           width: 100%;
+          height: 120px;
+          display: flex;
+          align-items: center;
         }
         .sponsor-marquee-track {
           display: inline-flex;
