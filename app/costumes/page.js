@@ -363,7 +363,7 @@ export default async function CostumesPage() {
               }
             />
             <div style={{ marginTop: '40px' }}>
-              <Link href="/sponsors" className="btn btn-primary btn-lg">
+              <Link href="/sponsor" className="btn btn-primary btn-lg">
                 Become a Sponsor
               </Link>
             </div>

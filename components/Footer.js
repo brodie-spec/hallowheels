@@ -124,7 +124,7 @@ export default function Footer() {
               <ul>
                 <li><Link href="/">Home</Link></li>
                 <li><Link href="/costumes">Costumes</Link></li>
-                <li><Link href="/sponsors">Become a Sponsor</Link></li>
+                <li><Link href="/sponsor">Become a Sponsor</Link></li>
               </ul>
             </div>
 

@@ -456,7 +456,7 @@ export default async function Home() {
                 <Link href="/costumes" className="btn btn-yellow btn-lg">
                   See the Costumes
                 </Link>
-                <Link href="/sponsors" className="btn" style={{color:'white', borderColor:'rgba(255,255,255,0.5)'}}>
+                <Link href="/sponsor" className="btn" style={{color:'white', borderColor:'rgba(255,255,255,0.5)'}}>
                   Become a Sponsor
                 </Link>
               </div>
@@ -472,7 +472,7 @@ export default async function Home() {
                 amazing kids move through the world.
               </p>
               <div className="hero-actions">
-                <Link href="/sponsors" className="btn btn-yellow btn-lg">
+                <Link href="/sponsor" className="btn btn-yellow btn-lg">
                   Become a Sponsor
                 </Link>
               </div>
@@ -498,7 +498,7 @@ export default async function Home() {
                 <Link href="/costumes" className="btn btn-yellow btn-lg">
                   See All Costumes
                 </Link>
-                <Link href="/sponsors" className="btn" style={{color:'white', borderColor:'rgba(255,255,255,0.5)'}}>
+                <Link href="/sponsor" className="btn" style={{color:'white', borderColor:'rgba(255,255,255,0.5)'}}>
                   Become a 2027 Sponsor
                 </Link>
               </div>
@@ -645,7 +645,7 @@ export default async function Home() {
           </p>
           {siteState === 'voting'
             ? <Link href="/costumes" className="btn btn-yellow btn-lg">Show Your Support</Link>
-            : <Link href="/sponsors" className="btn btn-yellow btn-lg">Learn About Sponsorship</Link>
+            : <Link href="/sponsor" className="btn btn-yellow btn-lg">Learn About Sponsorship</Link>
           }
         </div>
       </section>
