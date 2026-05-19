@@ -3,13 +3,15 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 
-const MOBILITY_DEVICES = [
-  'Wheelchair',
+const MOBILITY_DEVICE_SUGGESTIONS = [
+  'Manual Wheelchair',
   'Power Wheelchair',
   'Adaptive Bike',
   'Walker',
   'Adaptive Stroller',
-  'Other',
+  'Gait Trainer',
+  'Standing Frame',
+  'Scooter',
 ]
 
 const RELATIONSHIPS = ['Parent', 'Legal Guardian', 'Other']
@@ -67,8 +69,7 @@ function validate(form) {
   const e = {}
   if (!form.childFirstName.trim())  e.childFirstName  = "Child's first name is required"
   if (!form.childLastName.trim())   e.childLastName   = "Child's last name is required"
-  if (!form.costumeName.trim())     e.costumeName     = 'Costume name is required'
-  if (!form.mobilityDevice)         e.mobilityDevice  = 'Please select a mobility device type'
+  if (!form.mobilityDevice.trim())  e.mobilityDevice  = 'Please describe the mobility device your child uses'
   if (!form.parentFirstName.trim()) e.parentFirstName = 'First name is required'
   if (!form.parentLastName.trim())  e.parentLastName  = 'Last name is required'
   if (!form.relationship)           e.relationship    = 'Please select your relationship to the child'
@@ -147,6 +148,33 @@ export default function RegisterPage() {
         [name]: arr.includes(value) ? arr.filter(v => v !== value) : [...arr, value],
       }
     })
+  }
+
+  function toggleDisclosure(value) {
+    setForm(prev => {
+      const current = prev.disclosures
+      if (value === 'None') {
+        // Selecting None clears everything else; deselecting None just removes it
+        return { ...prev, disclosures: current.includes('None') ? [] : ['None'] }
+      }
+      // Selecting any other option clears None; toggling normally otherwise
+      const without = current.filter(v => v !== 'None')
+      const next = without.includes(value)
+        ? without.filter(v => v !== value)
+        : [...without, value]
+      return { ...prev, disclosures: next }
+    })
+  }
+
+  const SELECTABLE_DISCLOSURES = DISCLOSURES.filter(d => d !== 'None')
+  const allSelected = SELECTABLE_DISCLOSURES.every(d => form.disclosures.includes(d))
+
+  function toggleSelectAll() {
+    if (allSelected) {
+      setForm(prev => ({ ...prev, disclosures: [] }))
+    } else {
+      setForm(prev => ({ ...prev, disclosures: SELECTABLE_DISCLOSURES }))
+    }
   }
 
   async function handleSubmit(e) {
@@ -405,6 +433,15 @@ export default function RegisterPage() {
         .reg-check-label:hover input[type="checkbox"] {
           border-color: var(--orange);
         }
+        .reg-check-label--select-all {
+          font-weight: 700;
+          color: var(--navy);
+        }
+        .reg-disclosure-divider {
+          height: 1px;
+          background: var(--gray-200);
+          margin: 2px 0;
+        }
 
         /* ── Submit area ── */
         .reg-submit-error {
@@ -547,8 +584,7 @@ export default function RegisterPage() {
                 <FormField
                   id="reg-costumeName"
                   label="Costume Name / Title"
-                  required
-                  hint="What have you named your creation? e.g. The Olaf Express"
+                  hint="Optional — don't worry if you haven't decided yet!"
                   error={errors.costumeName}
                 >
                   <input
@@ -557,8 +593,7 @@ export default function RegisterPage() {
                     className="reg-input"
                     value={form.costumeName}
                     onChange={e => setField('costumeName', e.target.value)}
-                    aria-required="true"
-                    aria-describedby={errors.costumeName ? 'reg-costumeName-error' : 'reg-costumeName-hint'}
+                    aria-describedby="reg-costumeName-hint"
                   />
                 </FormField>
                 <FormField
@@ -567,19 +602,22 @@ export default function RegisterPage() {
                   required
                   error={errors.mobilityDevice}
                 >
-                  <select
+                  <input
                     id="reg-mobilityDevice"
-                    className="reg-select"
+                    type="text"
+                    list="device-suggestions"
+                    className="reg-input"
                     value={form.mobilityDevice}
                     onChange={e => setField('mobilityDevice', e.target.value)}
+                    placeholder="e.g. Manual Wheelchair, Power Chair, Adaptive Bike…"
                     aria-required="true"
                     aria-describedby={errors.mobilityDevice ? 'reg-mobilityDevice-error' : undefined}
-                  >
-                    <option value="">Select a device type…</option>
-                    {MOBILITY_DEVICES.map(d => (
-                      <option key={d} value={d}>{d}</option>
+                  />
+                  <datalist id="device-suggestions">
+                    {MOBILITY_DEVICE_SUGGESTIONS.map(d => (
+                      <option key={d} value={d} />
                     ))}
-                  </select>
+                  </datalist>
                 </FormField>
               </div>
             </div>
@@ -800,12 +838,22 @@ export default function RegisterPage() {
                     I authorize disclosure of the following personal information (check all that apply):
                   </legend>
                   <div className="reg-checkbox-group">
+                    {/* Select All */}
+                    <label className="reg-check-label reg-check-label--select-all">
+                      <input
+                        type="checkbox"
+                        checked={allSelected}
+                        onChange={toggleSelectAll}
+                      />
+                      Select All
+                    </label>
+                    <div className="reg-disclosure-divider" aria-hidden="true" />
                     {DISCLOSURES.map(d => (
                       <label key={d} className="reg-check-label">
                         <input
                           type="checkbox"
                           checked={form.disclosures.includes(d)}
-                          onChange={() => toggleCheck('disclosures', d)}
+                          onChange={() => toggleDisclosure(d)}
                         />
                         {d}
                       </label>
