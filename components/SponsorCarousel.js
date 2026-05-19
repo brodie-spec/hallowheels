@@ -98,11 +98,23 @@ export default async function SponsorCarousel() {
           opacity: 1;
         }
         .sponsor-logo-box {
+          background: white;
+          border-radius: 8px;
+          padding: 10px 16px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.15);
           display: flex;
           align-items: center;
           justify-content: center;
+          height: 90px;
+          max-width: 220px;
+          width: 220px;
+          flex-shrink: 0;
         }
         .sponsor-logo-box img {
+          max-height: 70px;
+          max-width: 200px;
+          width: auto;
+          height: auto;
           object-fit: contain;
           display: block;
         }
@@ -164,14 +176,10 @@ export default async function SponsorCarousel() {
 
 function SponsorItem({ sponsor, height, maxWidth }) {
   const logoContent = sponsor.logo_path ? (
-    <div
-      className="sponsor-logo-box"
-      style={{ height: `${height}px`, width: `${maxWidth}px`, maxWidth: `${maxWidth}px` }}
-    >
+    <div className="sponsor-logo-box">
       <img
         src={sponsor.logo_path}
         alt={sponsor.name}
-        style={{ height: `${height}px`, maxWidth: `${maxWidth}px` }}
       />
     </div>
   ) : (
