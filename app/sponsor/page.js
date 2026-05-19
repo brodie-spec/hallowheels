@@ -1,6 +1,5 @@
 'use client'
 
-import NeonForm from '@/components/NeonForm'
 
 const SPONSOR_LEVELS = [
   {
@@ -277,32 +276,6 @@ export default function SponsorsPage() {
         }
 
         /* ── Form section ── */
-        .form-section {
-          background: var(--cream);
-          padding: 80px 24px;
-          text-align: center;
-        }
-        .form-section h2 {
-          margin-bottom: 8px;
-        }
-        .form-section .divider {
-          margin-bottom: 16px;
-        }
-        .form-section > p {
-          color: var(--text-muted);
-          max-width: 520px;
-          margin: 0 auto 40px;
-        }
-        .form-wrap {
-          max-width: 640px;
-          margin: 0 auto;
-          background: var(--white);
-          border-radius: var(--radius-lg);
-          padding: 0px;
-          box-shadow: var(--shadow);
-          overflow: hidden;
-        }
-
         /* ── Questions band ── */
         .questions-band {
           background: var(--navy);
@@ -331,7 +304,6 @@ export default function SponsorsPage() {
         @media (max-width: 600px) {
           .levels-grid { grid-template-columns: 1fr; }
           .benefits-card { padding: 24px; }
-          .form-wrap { padding: 24px; }
         }
       `}</style>
 
@@ -446,24 +418,6 @@ export default function SponsorsPage() {
               </button>
             </article>
           ))}
-        </div>
-      </section>
-
-      {/* ── NEON FORM ── */}
-      <section
-        className="form-section"
-        id="sponsor-form"
-        aria-labelledby="form-heading"
-      >
-        <span className="section-label">Sponsor HalloWheels 2026</span>
-        <h2 id="form-heading">Ready to Make an Impact?</h2>
-        <div className="divider" aria-hidden="true" />
-        <p>
-          Complete your sponsorship securely below. All donations go directly
-          to C.A.T.S. programs serving children with disabilities across Virginia.
-        </p>
-        <div className="form-wrap">
-          <NeonForm />
         </div>
       </section>
 
