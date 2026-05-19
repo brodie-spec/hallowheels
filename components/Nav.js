@@ -170,6 +170,7 @@ export default function Nav() {
           {/* Desktop links */}
           <ul className="nav-links" role="list">
             <li><Link href="/costumes">Costumes</Link></li>
+            <li><Link href="/register">Register</Link></li>
             <li><Link href="/sponsor">Sponsors</Link></li>
             <li>
               <Link href="/costumes" className="nav-cta">
@@ -201,6 +202,7 @@ export default function Nav() {
       >
         <ul role="list">
           <li><Link href="/costumes" onClick={closeMenu}>Costumes</Link></li>
+          <li><Link href="/register" onClick={closeMenu}>Register</Link></li>
           <li><Link href="/sponsor" onClick={closeMenu}>Sponsors</Link></li>
           <li>
             <Link href="/costumes" className="nav-cta" onClick={closeMenu}>

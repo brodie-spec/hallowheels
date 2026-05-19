@@ -193,7 +193,7 @@ function CostumeForm({ initial, activeYear, onSave, onCancel, saving }) {
 
 // ── CostumeRow ────────────────────────────────────────────────────────────────
 
-function CostumeRow({ costume, activeYear, isEditing, isConfirmingDelete, onEdit, onCancelEdit, onSaveEdit, onDelete, onCancelDelete, onConfirmDelete, saving }) {
+function CostumeRow({ costume, activeYear, isEditing, isConfirmingDelete, onEdit, onCancelEdit, onSaveEdit, onDelete, onCancelDelete, onConfirmDelete, saving, readOnly }) {
   const thumb = costume.photo_urls?.[0]
 
   return (
@@ -215,7 +215,9 @@ function CostumeRow({ costume, activeYear, isEditing, isConfirmingDelete, onEdit
           </span>
         </div>
         <div className="costume-row-actions">
-          {isConfirmingDelete ? (
+          {readOnly ? (
+            <span className="costume-row-readonly">View only</span>
+          ) : isConfirmingDelete ? (
             <>
               <span className="delete-confirm-text">Delete this costume?</span>
               <button className="btn btn-sm btn-secondary" onClick={onCancelDelete}>Cancel</button>
@@ -577,23 +579,25 @@ export default function AdminPanel() {
   const [sponsorSaving, setSponsorSaving] = useState(false)
   const [sponsorDeleting, setSponsorDeleting] = useState(false)
 
+  // ── Year selector state ──────────────────────────────────────────────────────
+  const [viewingYear, setViewingYear]       = useState(null)
+  const [availableYears, setAvailableYears] = useState([])
+
   const activeYear = parseInt(settings.active_year || new Date().getFullYear())
 
   // ── Data fetching ────────────────────────────────────────────────────────────
 
-  const fetchCostumes = useCallback(async () => {
-    const yr = parseInt(
-      (await supabase.from('settings').select('value').eq('key', 'active_year').single())
-        .data?.value || activeYear
-    )
-    const { data } = await supabase
+  const fetchCostumes = useCallback(async (yr) => {
+    console.log('[AdminPanel] fetchCostumes year:', yr)
+    const { data, error } = await supabase
       .from('costumes')
       .select('*')
       .eq('year', yr)
       .order('name')
+    console.log('[AdminPanel] fetchCostumes result:', { count: data?.length, error })
     if (data) setCostumes(data)
     setLoadingCostumes(false)
-  }, [activeYear])
+  }, [])
 
   const fetchSponsors = useCallback(async () => {
     const { data } = await supabase
@@ -607,18 +611,35 @@ export default function AdminPanel() {
   }, [activeYear])
 
   useEffect(() => {
-    async function loadSettings() {
-      const { data } = await supabase.from('settings').select('*')
-      if (data) setSettings(Object.fromEntries(data.map(r => [r.key, r.value])))
+    async function init() {
+      const [{ data: settingsData }, { data: yearsData }] = await Promise.all([
+        supabase.from('settings').select('*'),
+        supabase.from('costumes').select('year').order('year', { ascending: false }),
+      ])
+
+      let yr = new Date().getFullYear()
+      if (settingsData) {
+        const s = Object.fromEntries(settingsData.map(r => [r.key, r.value]))
+        setSettings(s)
+        yr = parseInt(s.active_year || yr)
+      }
+      setViewingYear(yr)
+
+      const years = yearsData ? [...new Set(yearsData.map(r => r.year))] : []
+      if (!years.includes(yr)) years.unshift(yr)
+      setAvailableYears(years.sort((a, b) => b - a))
     }
-    loadSettings()
+    init()
   }, [])
 
   useEffect(() => {
-    fetchCostumes()
-    const id = setInterval(fetchCostumes, 30000)
-    return () => clearInterval(id)
-  }, [fetchCostumes])
+    if (viewingYear === null) return
+    fetchCostumes(viewingYear)
+    if (viewingYear === activeYear) {
+      const id = setInterval(() => fetchCostumes(viewingYear), 30000)
+      return () => clearInterval(id)
+    }
+  }, [fetchCostumes, viewingYear, activeYear])
 
   useEffect(() => {
     fetchSponsors()
@@ -637,7 +658,7 @@ export default function AdminPanel() {
       } else {
         addToast(fd.get('id') ? 'Costume updated!' : 'Costume added!', 'success')
         setEditingId(null)
-        await fetchCostumes()
+        await fetchCostumes(viewingYear)
       }
     } catch {
       addToast('Something went wrong. Please try again.', 'error')
@@ -655,7 +676,7 @@ export default function AdminPanel() {
       } else {
         addToast('Costume deleted.', 'success')
         setDeletingId(null)
-        await fetchCostumes()
+        await fetchCostumes(viewingYear)
       }
     } catch {
       addToast('Delete failed. Please try again.', 'error')
@@ -1371,6 +1392,42 @@ export default function AdminPanel() {
           margin: 0;
         }
 
+        /* ── Year selector ── */
+        .year-select {
+          padding: 5px 10px;
+          border: 2px solid var(--gray-200);
+          border-radius: var(--radius-full);
+          font-family: var(--font-body);
+          font-size: 0.82rem;
+          font-weight: 600;
+          color: var(--navy);
+          background: var(--white);
+          cursor: pointer;
+          transition: border-color 0.18s;
+        }
+        .year-select:focus {
+          outline: 3px solid var(--yellow);
+          outline-offset: 2px;
+          border-color: var(--navy);
+        }
+
+        /* ── Readonly banner ── */
+        .readonly-banner {
+          background: #FEF3C7;
+          border-left: 4px solid var(--yellow);
+          padding: 10px 24px;
+          font-size: 0.875rem;
+          color: #78350F;
+          font-weight: 600;
+        }
+
+        /* ── Readonly row ── */
+        .costume-row-readonly {
+          font-size: 0.78rem;
+          color: var(--text-muted);
+          font-style: italic;
+        }
+
         /* ── Responsive ── */
         @media (max-width: 640px) {
           .admin-content { padding: 24px 16px 100px; }
@@ -1420,27 +1477,60 @@ export default function AdminPanel() {
           <div>
             <p className="admin-section-title">Costumes</p>
 
-            <div className="admin-card" style={{ marginBottom: '16px' }}>
-              <div className="admin-card-header">
-                <h2>Add New Costume</h2>
-                <span className="admin-card-meta">{activeYear}</span>
+            {/* Add form — only shown when viewing the active year */}
+            {viewingYear === activeYear && (
+              <div className="admin-card" style={{ marginBottom: '16px' }}>
+                <div className="admin-card-header">
+                  <h2>Add New Costume</h2>
+                  <span className="admin-card-meta">{activeYear}</span>
+                </div>
+                <div className="admin-card-body">
+                  <CostumeForm
+                    activeYear={activeYear}
+                    onSave={handleSaveCostume}
+                    saving={costumeSaving}
+                  />
+                </div>
               </div>
-              <div className="admin-card-body">
-                <CostumeForm
-                  activeYear={activeYear}
-                  onSave={handleSaveCostume}
-                  saving={costumeSaving}
-                />
-              </div>
-            </div>
+            )}
 
             <div className="admin-card">
               <div className="admin-card-header">
-                <h2>Current Costumes</h2>
-                <span className="admin-card-meta">
-                  {loadingCostumes ? '…' : `${costumes.length} costume${costumes.length !== 1 ? 's' : ''}`}
-                </span>
+                <h2>
+                  {viewingYear !== null && viewingYear !== activeYear
+                    ? `${viewingYear} Costumes`
+                    : 'Current Costumes'}
+                </h2>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                  {availableYears.length > 1 && viewingYear !== null && (
+                    <select
+                      value={viewingYear}
+                      onChange={e => {
+                        setViewingYear(parseInt(e.target.value))
+                        setEditingId(null)
+                        setDeletingId(null)
+                      }}
+                      className="year-select"
+                      aria-label="View costumes by year"
+                    >
+                      {availableYears.map(yr => (
+                        <option key={yr} value={yr}>{yr}</option>
+                      ))}
+                    </select>
+                  )}
+                  <span className="admin-card-meta">
+                    {loadingCostumes ? '…' : `${costumes.length} costume${costumes.length !== 1 ? 's' : ''}`}
+                  </span>
+                </div>
               </div>
+
+              {/* Readonly banner for past years */}
+              {viewingYear !== null && viewingYear !== activeYear && (
+                <div className="readonly-banner" role="status">
+                  Viewing {viewingYear} — switch to {activeYear} to make changes.
+                </div>
+              )}
+
               <div className="admin-card-body">
                 {loadingCostumes ? (
                   <div className="admin-loading">
@@ -1448,7 +1538,10 @@ export default function AdminPanel() {
                     Loading costumes…
                   </div>
                 ) : costumes.length === 0 ? (
-                  <p className="admin-empty">No costumes yet for {activeYear}. Add one above!</p>
+                  <p className="admin-empty">
+                    No costumes for {viewingYear ?? activeYear}.
+                    {viewingYear === activeYear ? ' Add one above!' : ''}
+                  </p>
                 ) : (
                   <div className="costume-list" role="list" aria-label="Costume list">
                     {costumes.map(c => (
@@ -1465,6 +1558,7 @@ export default function AdminPanel() {
                           onCancelDelete={() => setDeletingId(null)}
                           onConfirmDelete={() => handleDeleteCostume(c.id)}
                           saving={editingId === c.id ? costumeSaving : costumeDeleting}
+                          readOnly={viewingYear !== activeYear}
                         />
                       </div>
                     ))}
